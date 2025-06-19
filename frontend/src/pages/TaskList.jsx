@@ -24,13 +24,6 @@ const TaskList = () => {
                 <div className="flex flex-wrap gap-4 justify-evenly">
                     <Card />
                     <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
                 </div>
             </div>
         </div>

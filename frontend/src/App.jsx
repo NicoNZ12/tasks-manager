@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom"
 
 function App() {
   return (
-      <div className="App">
+      <div className="bg-purple-100 min-h-screen">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/tasks" element={<TaskList />} />

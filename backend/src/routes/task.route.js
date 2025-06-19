@@ -1,21 +1,11 @@
 import Router from 'express'
+import TaskController from '../controllers/task.controller.js'
 
 const router = Router()
 
-router.get("/", (req, res) => {
-
-})
-router.get("/:id", (req, res) => {
-
-})
-router.post("/", (req, res) => {
-
-})
-router.put("/:id", (req, res) => {
-
-})
-router.delete("/:id", (req, res) => {
-
-})
+router.get("/", TaskController.getAllTasks)
+router.post("/", TaskController.addTask)
+router.put("/:id", TaskController.updateTask)
+router.delete("/:id", TaskController.deleteTask)
 
 export default router

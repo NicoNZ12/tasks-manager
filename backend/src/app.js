@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import taskRoutes from './routes/task.route.js'
 import { notFound, errorsHandler } from './middlewares/errorsHandler.js'
 
@@ -16,7 +17,7 @@ app.use(cors({
     origin: process.env.FRONTEND_URL,
     method: ["GET", "POST", "PUT", "DELETE", "OPTION"]
 }))
-app.use(errorsHandler)
+
 
 //Home route
 app.get("/", (req,res) => {
@@ -28,6 +29,8 @@ app.use('/api/tasks', taskRoutes)
 
 
 app.use(notFound)
+
+app.use(errorsHandler)
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`)

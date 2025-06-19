@@ -11,8 +11,8 @@ const TaskList = () => {
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
                 <button className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-1 rounded-full font-semibold">All</button>
-                <button className="bg-gray-600 hover:bg-gray-600 text-white px-4 py-1 rounded-full font-semibold">Pending</button>
-                <button className="bg-gray-600 hover:bg-gray-600 text-white px-4 py-1 rounded-full font-semibold">Completed</button>
+                <button className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1 rounded-full font-semibold">Pending</button>
+                <button className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1 rounded-full font-semibold">Completed</button>
                 <div className="justify-end ml-auto">
                     <Link to="/tasks/new" className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2"> 
                         <PlusCircleIcon className="w-5 h-5" /> New Task 

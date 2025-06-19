@@ -5,9 +5,9 @@ import {
   maxLength,
   boolean,
   date,
-  default as vDefault,
-  optional,
-  pipe
+  pipe,
+  safeParse,
+  partial
 } from 'valibot';
 
 const taskModel = object({
@@ -16,7 +16,7 @@ const taskModel = object({
   title: pipe(
     string(),
     minLength(5, "The title is too short"),
-    maxLength(60, "The title is too long")
+    maxLength(60, "The title is too long"),
   ),
 
   description: pipe(
@@ -25,16 +25,21 @@ const taskModel = object({
     maxLength(255, "The description is too long")
   ),
 
-  completed: optional(vDefault(boolean(), false)),
+  completed: boolean(),
 
-  createdAt: optional(vDefault(date(), () => new Date())),
-  updatedAt: optional(vDefault(date(), () => new Date()))
+  createdAt: date()
 });
 
 //array como almacenamiento en memoria
-const tasks = []
+export const tasks = []
 
-export default {
-    taskModel,
-    tasks
+export const validateInput = (object) => {
+    const result = safeParse(taskModel, object)
+    return result
 }
+
+export const validateUpdateInput = (object) => {
+    const partialSchema = partial(taskModel); 
+    return safeParse(partialSchema, object);
+}
+

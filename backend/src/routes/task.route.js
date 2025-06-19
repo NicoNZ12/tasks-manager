@@ -4,9 +4,8 @@ import TaskController from '../controllers/task.controller.js'
 const router = Router()
 
 router.get("/", TaskController.getAllTasks)
-
-router.post("/add", TaskController.addTask)
-router.put("/update/:id", TaskController.updateTask)
-router.delete("/delete/:id", TaskController.deleteTask)
+router.post("/", TaskController.addTask)
+router.put("/:id", TaskController.updateTask)
+router.delete("/:id", TaskController.deleteTask)
 
 export default router

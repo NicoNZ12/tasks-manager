@@ -11,13 +11,13 @@ export const getTasks = () => {
     return tasksList
 }
 
-export const createTask = (title, description) => {
+export const createTask = (title, description, completed = false) => {
 
     const newTask = {
         id: randomUUID(),
         title,
         description,
-        completed: false,
+        completed,
         createdAt: new Date(),
     }
 

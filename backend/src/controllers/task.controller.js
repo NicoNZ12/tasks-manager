@@ -18,9 +18,9 @@ class TaskController{
 
     static addTask = (req, res, next) => {
         try{
-            const {title, description} = req.body
+            const {title, description, completed} = req.body
 
-            const result = createTask(title, description);
+            const result = createTask(title, description, completed);
 
             if(result.error){
                 return res.status(400).json({

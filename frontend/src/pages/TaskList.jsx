@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { PlusCircleIcon} from '@heroicons/react/24/outline';
 import { getAllTasks } from "../api/ApiTask";
 import { useEffect, useState } from "react";
+import { deleteTask } from "../api/ApiTask";
 
 const TaskList = () => {
     const [tasks, setTasks] = useState([])
@@ -38,6 +39,16 @@ const TaskList = () => {
                 : "bg-gray-600 hover:bg-gray-700 text-white"
         }`;
 
+
+    const handleDelete = async (id) => {
+        try{
+            await deleteTask(id)
+            setTasks(prev => prev.filter(task => task.id !== id))
+        }catch(error){
+            console.error("Error deleting task:", error);
+        }
+    }
+
     return (
         <div className="min-h-screen max-w-[90%] md:max-w-[80%] lg:max-w-[70%] mx-auto text-white px-4 py-6">
             <div className="mb-6">
@@ -64,7 +75,7 @@ const TaskList = () => {
                     <div className="flex flex-wrap gap-4 justify-evenly">
                         {filteredTasks.length > 0 ? (
                             filteredTasks.map(task => (
-                                <Card key={task.id} task={task} />
+                                <Card key={task.id} task={task} onDelete={handleDelete} />
                             ))
                         ) : (
                             <p className="text-purple-700 font-medium text-center w-full">No tasks found</p>

@@ -33,6 +33,7 @@ export const deleteTask = async (id) => {
     const datos = await fetch(`${import.meta.env.VITE_API_URL}/${id}`, {
         method: "DELETE"
     })
-    const result = await datos.json()
-    return result
+    if(datos.status === 204){
+        return true
+    }
 }

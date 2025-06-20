@@ -1,7 +1,7 @@
 
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
-const Card = ({task}) => {
+const Card = ({task, onDelete}) => {
   return (
     <div className="bg-white rounded-xl shadow-md p-6 max-w-md w-full transition hover:shadow-lg">
       <h2 className="text-2xl font-semibold text-purple-700 mb-2">{task.title}</h2>
@@ -12,7 +12,9 @@ const Card = ({task}) => {
           <PencilIcon className="w-4 h-4" />
           Edit
         </button>
-        <button className="flex items-center gap-1 px-4 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition">
+        <button 
+          className="flex items-center gap-1 px-4 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition" 
+          onClick={() => onDelete(task.id)}>
           <TrashIcon className="w-4 h-4" />
           Delete
         </button>

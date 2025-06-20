@@ -4,6 +4,7 @@ import { PlusCircleIcon} from '@heroicons/react/24/outline';
 import { getAllTasks } from "../api/ApiTask";
 import { useEffect, useState } from "react";
 import { deleteTask } from "../api/ApiTask";
+import { toast } from "react-hot-toast";
 
 const TaskList = () => {
     const [tasks, setTasks] = useState([])
@@ -15,7 +16,9 @@ const TaskList = () => {
         const fetchTasks = async () => {
             try {
                 const data = await getAllTasks()
-                setTasks(data)
+                if(!data.message) {
+                    setTasks(data.payload); 
+                }
             } catch (error) {
                 setError(error.message)
             } finally {
@@ -29,7 +32,7 @@ const TaskList = () => {
     const filteredTasks = tasks.filter(task => {
         if (filter === "pending") return !task.completed;
         if (filter === "completed") return task.completed;
-        return true; // all
+        return true
     });
 
     const filterButtonClasses = (type) =>
@@ -40,10 +43,35 @@ const TaskList = () => {
         }`;
 
 
+    const handleConfirmDelete = async (id) => {
+        await deleteTask(id);
+        toast.dismiss();
+        toast.success("Task deleted successfully!");
+        setTasks(prev => prev.filter(task => task.id !== id));
+    }
+
     const handleDelete = async (id) => {
         try{
-            await deleteTask(id)
-            setTasks(prev => prev.filter(task => task.id !== id))
+            toast((t) => (
+                <div flex items-center justify-between>
+                    <span className="flex-grow font-medium">
+                        Are you sure you want to delete this task?
+                    </span>
+                    <div className="flex gap-2 ml-4">
+                        <button onClick={() => handleConfirmDelete(id)} className="ml-2 bg-red-500 text-white px-2 py-1 rounded">
+                            Confirm
+                        </button>
+                        <button onClick={() => toast.dismiss(t.id)} className="ml-2 bg-gray-500 text-white px-2 py-1 rounded">
+                            Dismiss
+                        </button>
+                    </div>
+                </div>
+                
+            ),{
+                duration: 60000,
+                position: "top-center",
+                icon: "⚠️"
+            });
         }catch(error){
             console.error("Error deleting task:", error);
         }
@@ -69,7 +97,7 @@ const TaskList = () => {
             {loading ? (
                 <p className="text-center text-purple-700 font-medium">Loading tasks...</p>
             ) : error ? (
-                <p className="text-center text-red-600 font-medium">Error: {error}</p>
+                <p className="text-center text-red-600 font-medium">{error}</p>
             ) : (
                 <div className="bg-purple-200 rounded-xl p-6 shadow-lg max-h-[80vh] overflow-y-auto hide-scrollbar">
                     <div className="flex flex-wrap gap-4 justify-evenly">

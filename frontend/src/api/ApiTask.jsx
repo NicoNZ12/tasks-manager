@@ -2,7 +2,7 @@
 export const getAllTasks = async () => {
     const datos = await fetch(import.meta.env.VITE_API_URL)
     const result = await datos.json()
-    return result.payload
+    return result
 }
 
 export const createTask = async (task) => {

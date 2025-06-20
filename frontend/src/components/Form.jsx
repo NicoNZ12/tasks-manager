@@ -1,18 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createTask } from "../api/ApiTask";
+import { toast } from "react-hot-toast";
 
-const Form = () => {
+const Form = ({task, onSubmit}) => {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [completed, setCompleted] = useState(false)
 
+    useEffect(() => {
+        if (task) {
+            setTitle(task.title);
+            setDescription(task.description);
+            setCompleted(task.completed || false)
+        }
+    }, [task]);
+
+    const cleanForm = () => {
+        setTitle("");
+        setDescription("");
+        setCompleted(false);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(!title || !description){
-            console.error("Title and description are required.");
-            return;
-        };
+        if(!title){
+            toast.error("Title is required")
+            return
+        }
+
+        if(title.length < 5 || title.length > 60){
+            toast.error("Title must be between 5 and 60 characters")
+            return
+        }
+
+        if(!description){
+            toast.error("Description is required")
+            return
+        }
+
+        if(description.length < 5 || description.length > 255){
+            toast.error("Description must be between 5 and 255 characters")
+            return
+        }
 
         const newTask = {
             title,
@@ -20,17 +50,12 @@ const Form = () => {
             completed
         };
 
-        try {
-            console.log("Tarea a enviar:", newTask);
-            const response = await createTask(newTask);
-            console.log("Task created:", response);
-
-            // Limpia el formulario
-            setTitle("");
-            setDescription("");
-            setCompleted(false);
-        } catch (error) {
-            console.error("Error creating task:", error);
+        if (onSubmit) {
+            await onSubmit(newTask)
+            cleanForm()
+        } else {
+            await createTask(newTask)
+            cleanForm()
         }
     };
 
@@ -38,7 +63,7 @@ const Form = () => {
         <div className="max-w-2xl mx-auto bg-white p-10 rounded-xl shadow-2xl">
             <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="title" className="text-lg block font-medium mb-1 text-start">Title</label>
+                    <label htmlFor="title" className="text-lg block font-medium mb-1 text-start">Title <span className="font-bold text-red-500">*</span></label>
                     <input
                         type="text"
                         id="title"
@@ -51,7 +76,7 @@ const Form = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="description" className="text-lg block font-medium mb-1 text-start">Description</label>
+                    <label htmlFor="description" className="text-lg block font-medium mb-1 text-start">Description <span className="font-bold text-red-500">*</span></label>
                     <textarea
                         id="description"
                         name="description"
@@ -75,7 +100,9 @@ const Form = () => {
                     <label htmlFor="completed" className="text-m">Complete task</label>
                 </div>
 
-                <button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white text-lg font-semibold py-2 px-4 rounded-md">Add Task</button>
+                <button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white text-lg font-semibold py-2 px-4 rounded-md">
+                    {task ? "Update Task" : "Create Task" }
+                </button>
             </form>
         </div>
     )

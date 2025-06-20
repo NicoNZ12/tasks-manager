@@ -1,15 +1,33 @@
 import Card from "../components/card";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import { getAllTasks } from "../api/ApiTask";
+import { useTasks } from "../context/TaskContext";
 
 const TaskItem = () => {
+    const { id } = useParams();
+    const [task, setTask] = useState(null);
+    const {handleDelete} = useTasks();
+
+    useEffect(() => {
+      const fetchTask = async () => {
+        const tasks = await getAllTasks();
+        const taskCard = tasks.payload.find(t => String(t.id) === id)
+        setTask(taskCard);
+      };
+      fetchTask();
+    }, [id]);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-2xl p-8">
         <h2 className="text-3xl font-bold text-purple-700 mb-6 text-center">Task Detail</h2>
         
         <div className="bg-purple-200 rounded-xl p-6 shadow-lg flex justify-center items-center">
-          <Card />
+          {task ? (
+            <Card task={task} onDelete={handleDelete} />
+          ) : <p className="text-gray-500">Loading task details...</p>}
         </div>
 
         <div className="mt-8 text-center">

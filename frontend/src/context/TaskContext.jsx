@@ -44,7 +44,7 @@ export const TasksProvider = ({ children }) => {
   const handleConfirmDelete = async (id) => {
     await deleteTask(id)
     toast.dismiss()
-    toast.success("Task deleted successfully!")
+    toast.success("Task deleted successfully!", { duration: 2500 });
     navigate("/tasks")
     setTasks((prev) => prev.filter((task) => task.id !== id))
   };

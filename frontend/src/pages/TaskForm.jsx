@@ -27,12 +27,12 @@ const TaskForm = () => {
         if (id) {
             await updateTask(id, data)
             await refreshTasks()
-            toast.success("Task updated successfully!")
+            toast.success("Task updated successfully!", {duration: 2500})
             navigate("/tasks")
         }else{
             await createTask(data)
             await refreshTasks()
-            toast.success("Task created successfully!")
+            toast.success("Task created successfully!", {duration: 2500})
             navigate("/tasks")
         }
     };

@@ -1,33 +1,13 @@
 import Card from "../components/card";
 import { Link } from "react-router-dom";
 import { PlusCircleIcon} from '@heroicons/react/24/outline';
-import { getAllTasks } from "../api/ApiTask";
-import { useEffect, useState } from "react";
-import { deleteTask } from "../api/ApiTask";
-import { toast } from "react-hot-toast";
+import { useTasks } from "../context/TaskContext";
+import { useState } from "react";
 
 const TaskList = () => {
-    const [tasks, setTasks] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
+    const {tasks, loading, error, handleDelete} = useTasks()
     const [filter, setFilter] = useState("all")
 
-    useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const data = await getAllTasks()
-                if(!data.message) {
-                    setTasks(data.payload); 
-                }
-            } catch (error) {
-                setError(error.message)
-            } finally {
-                setLoading(false)
-            }
-        };
-
-        fetchTasks();
-    },[])
 
     const filteredTasks = tasks.filter(task => {
         if (filter === "pending") return !task.completed;
@@ -41,41 +21,6 @@ const TaskList = () => {
                 ? "bg-pink-500 text-white"
                 : "bg-gray-600 hover:bg-gray-700 text-white"
         }`;
-
-
-    const handleConfirmDelete = async (id) => {
-        await deleteTask(id);
-        toast.dismiss();
-        toast.success("Task deleted successfully!");
-        setTasks(prev => prev.filter(task => task.id !== id));
-    }
-
-    const handleDelete = async (id) => {
-        try{
-            toast((t) => (
-                <div flex items-center justify-between>
-                    <span className="flex-grow font-medium">
-                        Are you sure you want to delete this task?
-                    </span>
-                    <div className="flex gap-2 ml-4">
-                        <button onClick={() => handleConfirmDelete(id)} className="ml-2 bg-red-500 text-white px-2 py-1 rounded">
-                            Confirm
-                        </button>
-                        <button onClick={() => toast.dismiss(t.id)} className="ml-2 bg-gray-500 text-white px-2 py-1 rounded">
-                            Dismiss
-                        </button>
-                    </div>
-                </div>
-                
-            ),{
-                duration: 60000,
-                position: "top-center",
-                icon: "⚠️"
-            });
-        }catch(error){
-            console.error("Error deleting task:", error);
-        }
-    }
 
     return (
         <div className="min-h-screen max-w-[90%] md:max-w-[80%] lg:max-w-[70%] mx-auto text-white px-4 py-6">
@@ -103,7 +48,7 @@ const TaskList = () => {
                     <div className="flex flex-wrap gap-4 justify-evenly">
                         {filteredTasks.length > 0 ? (
                             filteredTasks.map(task => (
-                                <Card key={task.id} task={task} onDelete={handleDelete} />
+                                <Card key={task.id} task={task} description={false} onDelete={handleDelete} />
                             ))
                         ) : (
                             <p className="text-purple-700 font-medium text-center w-full">No tasks found</p>

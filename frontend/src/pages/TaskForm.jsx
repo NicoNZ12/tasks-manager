@@ -4,12 +4,13 @@ import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { createTask, getAllTasks, updateTask } from "../api/ApiTask";
 import { toast } from "react-hot-toast";
+import { useTasks } from "../context/TaskContext";
 
 const TaskForm = () => {
     const { id } = useParams()
     const [task, setTask] = useState(null)
-
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const { refreshTasks } = useTasks()
 
     useEffect(() => {
         if (id) {
@@ -25,10 +26,12 @@ const TaskForm = () => {
     const handleSubmit = async (data) => {
         if (id) {
             await updateTask(id, data)
+            await refreshTasks()
             toast.success("Task updated successfully!")
             navigate("/tasks")
         }else{
-            await createTask(data);
+            await createTask(data)
+            await refreshTasks()
             toast.success("Task created successfully!")
             navigate("/tasks")
         }

@@ -1,4 +1,4 @@
-import Card from "../components/card";
+import Card from "../components/Card";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";

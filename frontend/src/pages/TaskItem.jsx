@@ -26,7 +26,7 @@ const TaskItem = () => {
         
         <div className="bg-purple-200 rounded-xl p-6 shadow-lg flex justify-center items-center">
           {task ? (
-            <Card task={task} onDelete={handleDelete} />
+            <Card task={task} description={true} onDelete={handleDelete} />
           ) : <p className="text-gray-500">Loading task details...</p>}
         </div>
 

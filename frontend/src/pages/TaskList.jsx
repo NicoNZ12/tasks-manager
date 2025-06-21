@@ -22,7 +22,6 @@ const TaskList = () => {
                 : "bg-gray-600 hover:bg-gray-700 text-white"
         }`;
 
-
     return (
         <div className="min-h-screen max-w-[90%] md:max-w-[80%] lg:max-w-[70%] mx-auto text-white px-4 py-6">
             <div className="mb-6">
@@ -49,7 +48,7 @@ const TaskList = () => {
                     <div className="flex flex-wrap gap-4 justify-evenly">
                         {filteredTasks.length > 0 ? (
                             filteredTasks.map(task => (
-                                <Card key={task.id} task={task} onDelete={handleDelete} />
+                                <Card key={task.id} task={task} description={false} onDelete={handleDelete} />
                             ))
                         ) : (
                             <p className="text-purple-700 font-medium text-center w-full">No tasks found</p>
